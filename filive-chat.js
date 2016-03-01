@@ -20,12 +20,27 @@ if (Meteor.isClient) {
         Messages.insert({
           message: value,
           timestamp: new Date(),
-          // user: Meteor.user_id()
+          user: Meteor.userId()
         });
       }
     }
 
-  })
+  });
+
+  Template.message.helpers({
+    user: function() {
+      return Meteor.users.findOne({_id: this.user})
+    },
+
+    time: function() {
+      return moment(this.timestamp).format('h:mm a');
+    }
+  });
+
+  Accounts.ui.config({
+    passwordSignupFields: "USERNAME_AND_OPTIONAL_EMAIL"
+
+  });
 
 }
 
